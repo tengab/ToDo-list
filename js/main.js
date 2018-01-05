@@ -41,15 +41,19 @@ function addTask() {
     var textNode = document.createTextNode(currentInput)
     var newInput = new Task
     newInput.init(textNode)
-
     var taskHistory = JSON.parse(localStorage.getItem("input")) || []
     taskHistory.push(currentInput)
     localStorage.setItem('input', JSON.stringify(taskHistory))
-    console.log(taskHistory)
+    document.getElementById('item').value = ""
 }
 
 document.getElementById("addbutton").addEventListener("click", addTask);
 
+function removeAll(){
+    localStorage.removeItem("input")
+    var qtyOfNewContainersAfterClick = document.getElementsByClassName('frame');
+    while(qtyOfNewContainersAfterClick[0])
+        qtyOfNewContainersAfterClick[0].parentNode.removeChild(qtyOfNewContainersAfterClick[0]);
+  }
 
-
-
+document.getElementById("removeAllTasks").addEventListener("click", removeAll);

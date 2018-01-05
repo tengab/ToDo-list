@@ -1,44 +1,55 @@
-function Frame() {
-
+function Task() {
 }
 
-Frame.prototype.init = function () {
+Task.prototype.init = function (textNode) {
     // main frame
-    var newDiv = document.createElement("div")
-    newDiv.setAttribute('class', 'frame')
-    var currentDiv = document.querySelector(".main");
-    document.body.appendChild(newDiv, currentDiv);
+    var container = document.createElement("div")
+    container.setAttribute('class', 'frame')
+    var placeToPutIntoHTML = document.querySelector(".main");
+    document.body.appendChild(container, placeToPutIntoHTML);
+
     // small frame inside main frame with text inside
-    var newDiv2 = document.createElement("div")
-    var newContent2 = document.getElementById('item').value
-    var textNode = document.createTextNode(newContent2)
-    newDiv2.setAttribute('class', 'small-frame')
-    newDiv2.appendChild(textNode)
-    newDiv.appendChild(newDiv2);
+    var taskViewer = document.createElement("div")
+    taskViewer.setAttribute('class', 'small-frame')
+    taskViewer.appendChild(textNode)
+    container.appendChild(taskViewer);
+
     // button to remove main frame
-    var newDiv1 = document.createElement("input")
-    newDiv1.setAttribute('type', 'button')
-    newDiv1.setAttribute('id', 'removeBtn')
-    newDiv1.setAttribute('value', 'delete')
-    newDiv.appendChild(newDiv1);
-    newDiv1.addEventListener("click", function (el) {
-        newDiv.parentNode.removeChild(newDiv)
-    })
+    var remover = document.createElement("input")
+    remover.setAttribute('type', 'button')
+    remover.setAttribute('value', 'delete')
+    remover.setAttribute('id', 'removebutton')
+    container.appendChild(remover);
+    remover.addEventListener("click", function (el) {
+        container.parentNode.removeChild(container)
+
+        var qtyOfNewContainersAfterClick = document.getElementsByClassName('frame')
+                localStorage.removeItem('frame')
+        var result = function() {
+            var empty = []
+            for (var i = 0; i < qtyOfNewContainersAfterClick.length; i++)
+                empty.push(qtyOfNewContainersAfterClick[i].innerText.slice(0, -1))
+            return empty
+        }
+        localStorage.removeItem("input")
+        localStorage.setItem('input', JSON.stringify(result()))
+   })
 }
 
-function newElement(cf) {
-    var newObj = {}
-    cf.call(newObj)
-    Object.setPrototypeOf(newObj, cf.prototype)
-    return newObj
+function addTask() {
+    var currentInput = document.getElementById('item').value
+    var textNode = document.createTextNode(currentInput)
+    var newInput = new Task
+    newInput.init(textNode)
+
+    var taskHistory = JSON.parse(localStorage.getItem("input")) || []
+    taskHistory.push(currentInput)
+    localStorage.setItem('input', JSON.stringify(taskHistory))
+    console.log(taskHistory)
 }
 
-function addToHTML() {
-    var newInput = newElement(Frame)
-    newInput.init()
-}
+document.getElementById("addbutton").addEventListener("click", addTask);
 
-document.getElementById("addbutton").addEventListener("click", addToHTML);
 
 
 

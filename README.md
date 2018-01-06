@@ -5,3 +5,5 @@ Basic functionalities are:
 - deleting task
 - deleting all tasks
 - continously updating localstorage file (tasks are stored in  value - array)
+
+Url:  http://blue-eyed-laugh.surge.sh/
